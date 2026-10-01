@@ -8,43 +8,44 @@ import (
 	"github.com/abhegyn/To-Do-list/cmd"
 )
 
-func new_begin(file *os.File) {
+func newBegin(file *os.File) {
 	w := csv.NewWriter(file)
 	defer w.Flush()
 
-	field_name := []string{"ID", "Task Name", "Creation", "Status"}
-
-	if err := w.Write(field_name); err != nil {
-		log.Fatalln("error writing to the file", err)
+	fieldName := [][]string{
+		{"ID", "Task Name", "Status"},
+		{"1", "Remove this example task", "Pending"},
 	}
-}
 
-func read_entries(file *os.File) {
-
-}
-
-func write_entry(file *os.File) {
-
+	for _, field := range fieldName {
+		if err := w.Write(field); err != nil {
+			log.Fatalln("error writing to the file", err)
+		}
+	}
 }
 
 func main() {
 	cmd.Execute()
-	f, err := os.Open("tasks.csv")
+	f, err := os.OpenFile(
+		"tasks.csv",
+		os.O_CREATE|os.O_WRONLY|os.O_TRUNC,
+		0644,
+	)
 
 	if err != nil {
-		log.Fatalln("failed to open file", err)
 		os.Create("tasks.csv")
 
-		f1, _ := os.Open("tasks.csv")
+		f1, _ := os.OpenFile(
+			"tasks.csv",
+			os.O_CREATE|os.O_WRONLY|os.O_TRUNC,
+			0644,
+		)
 		defer f1.Close()
-
-		new_begin(f1)
+		// starting the csv by field names
+		newBegin(f1)
 	}
-
 	defer f.Close()
 
 	// starting the csv by field names
-
-	new_begin(f)
-
+	newBegin(f)
 }

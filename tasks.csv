@@ -1,4 +1,2 @@
-first_name,last_name,occupation
-John,Doe,gardener
-Lucy,Smith,teacher
-Brian,Bethamy,programmer
+ID,Task Name,Status
+1,Remove this example task,Pending
