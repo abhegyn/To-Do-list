@@ -2,19 +2,25 @@ package main
 
 import (
 	"encoding/csv"
+	"fmt"
 	"log"
 	"os"
 
 	"github.com/abhegyn/To-Do-list/cmd"
 )
 
+var (
+	count int8
+)
+
 func newBegin(file *os.File) {
 	w := csv.NewWriter(file)
 	defer w.Flush()
-
+	count++
+	countStr := fmt.Sprintf("%v", count)
 	fieldName := [][]string{
 		{"ID", "Task Name", "Status"},
-		{"1", "Remove this example task", "Pending"},
+		{countStr, "Remove this example task", "Pending"},
 	}
 
 	for _, field := range fieldName {

@@ -1,6 +1,3 @@
-/*
-Copyright © 2026 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
@@ -15,17 +12,25 @@ import (
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add",
-	Short: "Adds a new tasks to the to-do list",
+	Short: "Add a task to To-Do List",
+	Long:  `Adds a new task to To-Do List.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		f, err := os.Open("tasks.csv")
+		f, err := os.OpenFile(
+			"tasks.csv",
+			os.O_CREATE|os.O_WRONLY|os.O_TRUNC,
+			0644,
+		)
 		if err != nil {
 			log.Fatalln("can't add another task due to:", err)
 		}
+		defer f.Close()
+
 		var task_name string
 		fmt.Println("Enter the tasks name")
 		fmt.Scanln(&task_name)
 		w := csv.NewWriter(f)
 		defer w.Flush()
+
 	},
 }
 
