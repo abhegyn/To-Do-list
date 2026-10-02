@@ -3,6 +3,7 @@ package cmd
 import (
 	"encoding/csv"
 	"fmt"
+	"io"
 	"log"
 	"os"
 	"strconv"
@@ -14,6 +15,52 @@ var (
 	taskName string
 	status   string
 )
+
+func getNextID(filename string) (int, error) {
+	file, err := os.Open(filename)
+	if err != nil {
+		// If the file does not exist, the first ID is 1.
+		if os.IsNotExist(err) {
+			return 1, nil
+		}
+
+		return 0, err
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	largestID := 0
+	for {
+		record, err := reader.Read()
+
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			return 0, err
+		}
+
+		// Skip empty or incomplete rows.
+		if len(record) == 0 {
+			continue
+		}
+
+		// The first row is the header: ID,Task Name,Status.
+		id, err := strconv.Atoi(record[0])
+		if err != nil {
+			// This skips the header row.
+			continue
+		}
+
+		if id > largestID {
+			largestID = id
+		}
+	}
+
+	return largestID + 1, nil
+}
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
@@ -32,8 +79,7 @@ var addCmd = &cobra.Command{
 		defer f.Close()
 
 		// create a flag for status with default value pending
-		Count++
-		newId := strconv.Itoa(Count)
+
 		tname, err := cmd.Flags().GetString("taskname") // accepts the flag var name
 		stat, err := cmd.Flags().GetString("status")
 		var oStat string
@@ -45,8 +91,13 @@ var addCmd = &cobra.Command{
 
 		writer := csv.NewWriter(f)
 
+		nextID, err := getNextID("tasks.csv")
+		if err != nil {
+			log.Fatal("could not get next ID:", err)
+		}
+
 		entry := []string{
-			newId,
+			strconv.Itoa(nextID),
 			tname,
 			oStat,
 		}
