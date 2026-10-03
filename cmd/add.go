@@ -29,6 +29,7 @@ func getNextID(filename string) (int, error) {
 	defer file.Close()
 
 	reader := csv.NewReader(file)
+	reader.Comma = '\t'
 
 	largestID := 0
 	for {
