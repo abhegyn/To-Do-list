@@ -10,6 +10,7 @@ import (
 
 func newBegin(file *os.File) {
 	w := csv.NewWriter(file)
+	w.Comma = '\t'
 	defer w.Flush()
 
 	header := []string{

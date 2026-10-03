@@ -90,6 +90,7 @@ var addCmd = &cobra.Command{
 		}
 
 		writer := csv.NewWriter(f)
+		writer.Comma = '\t'
 
 		nextID, err := getNextID("tasks.csv")
 		if err != nil {

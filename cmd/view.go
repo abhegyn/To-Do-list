@@ -1,3 +1,6 @@
+/*
+Copyright © 2026 NAME HERE <EMAIL ADDRESS>
+*/
 package cmd
 
 import (
@@ -6,25 +9,25 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// updateCmd represents the update command
-var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "Change the status of a command from to do list",
+// viewCmd represents the view command
+var viewCmd = &cobra.Command{
+	Use:   "view",
+	Short: "Display the entire to do list",
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("update called")
+		fmt.Println("view called")
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(updateCmd)
+	rootCmd.AddCommand(viewCmd)
 
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command
 	// and all subcommands, e.g.:
-	// updateCmd.PersistentFlags().String("foo", "", "A help for foo")
+	// viewCmd.PersistentFlags().String("foo", "", "A help for foo")
 
 	// Cobra supports local flags which will only run when this command
 	// is called directly, e.g.:
-	// updateCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
+	// viewCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
