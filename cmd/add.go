@@ -52,6 +52,7 @@ func getNextID(filename string) (int, error) {
 		id, err := strconv.Atoi(record[0])
 		if err != nil {
 			// This skips the header row.
+			// because an error would be raised in strconv
 			continue
 		}
 
@@ -125,8 +126,8 @@ func init() {
 
 	addCmd.Flags().StringVarP(
 		&taskName,
-		"taskname",
-		"t", //supposed to be one char only
+		"taskname", // flag name, access using --taskname
+		"t",        //supposed to be one char only, access using -t
 		"",
 		"specify the name of the task before adding it",
 	)
@@ -134,7 +135,7 @@ func init() {
 	addCmd.Flags().StringVarP(
 		&status,
 		"status",
-		"s", // supposed to be one char only
+		"s",
 		"false",
 		"specify whether the task is pending: false, or complete: true",
 	)
